@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <header>
+    <h1>Attendance Management</h1>
+    <nav>
+      <ul>
+        <li><a href="../index.html">Dashboard</a></li>
+        <li><a href="attendance.html" class="active">Attendance</a></li>
+        <li><a href="#">Employee</a></li>
+        <li><a href="#">Leave Request</a></li>
+        <li><a href="#">Payroll</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h2>Input Attendance</h2>
+      <form id="attendanceForm">
+        <label for="employee">Employee Name:</label>
+        <input type="text" id="employee" required>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" required>
+
+        <label for="status">Status:</label>
+        <select id="status" required>
+          <option value="Present">Present</option>
+          <option value="Late">Late</option>
+          <option value="Absent">Absent</option>
+        </select>
+
+        <button type="submit">Add Attendance</button>
+      </form>
+    </section>
+
+    <section class="table-section">
+      <h2>Attendance Records</h2>
+      <table id="attendanceTable">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Employee</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 HR System | Made by Ariesta</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById('attendanceForm');
+    const tableBody = document.querySelector('#attendanceTable tbody');
+
+    function loadAttendance() {
+      const records = JSON.parse(localStorage.getItem('attendance')) || [];
+      tableBody.innerHTML = '';
+      records.forEach((rec, index) => {
+        const row = `<tr>
+          <td>${index + 1}</td>
+          <td>${rec.employee}</td>
+          <td>${rec.date}</td>
+          <td>${rec.status}</td>
+        </tr>`;
+        tableBody.innerHTML += row;
+      });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const employee = document.getElementById('employee').value;
+      const date = document.getElementById('date').value;
+      const status = document.getElementById('status').value;
+
+      const records = JSON.parse(localStorage.getItem('attendance')) || [];
+      records.push({ employee, date, status });
+      localStorage.setItem('attendance', JSON.stringify(records));
+
+      form.reset();
+      loadAttendance();
+    });
+
+    loadAttendance();
+  </script>
+</body>
+</html>
