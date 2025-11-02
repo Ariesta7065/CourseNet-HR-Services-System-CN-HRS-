@@ -8,12 +8,12 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.CORS_ORIGIN, // dari .env
+  origin: process.env.CORS_ORIGIN,
   credentials: true
 }));
 app.use(express.json());
 
-// Koneksi ke PostgreSQL pakai Sequelize
+// Koneksi ke PostgreSQL
 const sequelize = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
@@ -22,11 +22,11 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'postgres',
-    logging: process.env.LOG_LEVEL === 'debug' // aktifkan log kalau mode debug
+    logging: false
   }
 );
 
-// Cek koneksi database
+// Cek koneksi
 sequelize.authenticate()
   .then(() => console.log('✅ Database connected successfully'))
   .catch(err => console.error('❌ Database connection failed:', err));
@@ -38,5 +38,5 @@ app.get('/', (req, res) => {
 
 // Jalankan server
 app.listen(PORT, () => {
-  console.log(`🌐 Server running at http://localhost:${PORT} in ${process.env.NODE_ENV} mode`);
+  console.log(`🌐 Server running at http://localhost:${PORT}`);
 });
